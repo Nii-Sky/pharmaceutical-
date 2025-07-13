@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PharmaRetail - E-commerce Platform</title>
+    <style>
+        /* General Reset and Font */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f9;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #007bff;
+            padding: 1rem;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-wrap: nowrap;
+        }
+
+        .nav-left, .nav-right {
+            display: flex;
+            flex-direction: row;
+            gap: 0.5rem;
+            list-style: none;
+            flex-wrap: nowrap;
+            align-items: center;
+            flex-shrink: 0.5;
+        }
+
+        .nav-left button, .nav-right button {
+            background-color: #ffffff;
+            color: #007bff;
+            border: 1px solid #007bff;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
+            flex-shrink: 0;
+            touch-action: manipulation;
+        }
+
+        .nav-left button:hover, .nav-right button:hover {
+            background-color: #0056b3;
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            padding: 0.2rem;
+            flex-shrink: 1;
+        }
+
+        .search-container input {
+            border: none;
+            outline: none;
+            padding: 0.3rem 0.5rem;
+            font-size: 1rem;
+            width: 120px;
+            flex-grow: 1;
+            min-width: 50px;
+        }
+
+        .search-container button {
+            background-color: transparent;
+            border: none;
+            padding: 0.3rem;
+            cursor: pointer;
+            color: #007bff;
+            font-size: 1rem;
+            flex-shrink: 0;
+            touch-action: manipulation;
+        }
+
+        .search-container button:hover {
+            color: #0056b3;
+            transform: none;
+        }
+
+        .nav-logo-container {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            justify-content: center;
+            flex-shrink: 1;
+            min-width: 80px;
+        }
+
+        .nav-logo {
+            max-height: 80px;
+            width: auto;
+            max-width: 100%;
+        }
+
+        /* Hamburger Menu Styles */
+        .hamburger-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #ffffff;
+            cursor: pointer;
+            padding: 0.5rem;
+            touch-action: manipulation;
+        }
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            background-color: #007bff;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            z-index: 1000;
+        }
+        .mobile-menu.active {
+            display: flex;
+        }
+        .mobile-menu button {
+            width: 100%;
+            text-align: center;
+            margin: 0.3rem 0;
+            padding: 0.5rem;
+            font-size: 1rem;
+            background-color: #ffffff;
+            color: #007bff;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .mobile-menu button:hover {
+            background-color: #0056b3;
+            color: #ffffff;
+        }
+
+        /* Header Section */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #ffffff;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            flex-wrap: nowrap;
+        }
+
+        .header-text-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+            text-align: center;
+            margin: 0 1rem;
+            flex-shrink: 1;
+            min-width: 150px;
+        }
+
+        .group-text {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 0.25rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .header-logo-left, .header-logo-right {
+            max-height: 120px;
+            width: auto;
+            max-width: 400px;
+            margin: 0 15px;
+            flex-shrink: 1;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            color: #333;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        /* Product Grid - Always 3 columns */
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .product-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: calc(33.33% - 1rem);
+            min-width: 200px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .product-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 19px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 0.75rem;
+        }
+
+        .product-card h3 {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+            color: #333;
+            text-align: center;
+        }
+
+        .product-card p {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+            text-align: center;
+        }
+
+        .product-card .price {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-card .rating {
+            font-size: 1rem;
+            color: #ffc107;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-card .button-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .product-card button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            touch-action: manipulation;
+            min-width: 100px;
+        }
+
+        .product-card button:hover {
+            background-color: #ebe707;
+        }
+
+        .product-card button:active {
+            animation: clickEffect 0.3s ease;
+        }
+
+        @keyframes clickEffect {
+            0% {
+                transform: scale(1);
+                background-color: #28a745;
+            }
+            50% {
+                transform: scale(0.95);
+                background-color: #1e7e34;
+            }
+            100% {
+                transform: scale(1);
+                background-color: #28a745;
+            }
+        }
+
+        /* Cart Section */
+        #cart {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        #cart h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #2b2929;
+        }
+
+        #cart-items {
+            list-style: none;
+        }
+
+        #cart-items li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .remove-from-cart-btn {
+            background-color: #0e0d0d;
+            color: rgb(247, 245, 245);
+            border: none;
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease-in-out;
+            touch-action: manipulation;
+            min-width: 80px;
+        }
+
+        .remove-from-cart-btn:hover {
+            background-color: #ea081f;
+        }
+
+        #cart-total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            text-align: right;
+            color: #333;
+        }
+
+        /* Payment Section */
+        #payment {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        #payment h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #2b2929;
+        }
+
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .payment-method {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .payment-method label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        #card-element {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            height: 40px;
+        }
+
+        .payment-method button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            touch-action: manipulation;
+            min-width: 150px;
+        }
+
+        .payment-method button:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Modal Styles for AI Feature */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+            touch-action: manipulation;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #007bff;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .modal-input-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .modal-button-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        .modal-button-group button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            touch-action: manipulation;
+            min-width: 100px;
+        }
+
+        .modal-button-group button:hover {
+            background-color: #0056b3;
+        }
+
+        .modal-response-area {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 1rem;
+            min-height: 100px;
+            font-size: 0.9rem;
+            color: #333;
+            overflow-y: auto;
+            max-height: 200px;
+            position: relative;
+        }
+
+        .loading-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .disclaimer-text {
+            font-size: 0.8rem;
+            color: #777;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        /* Responsive Design for Smartphones (6.1-6.9 inches, ~360px-430px) */
+        @media (max-width: 430px) {
+            /* Navigation Bar Adjustments */
+            .nav-container {
+                padding: 0.5rem;
+                flex-wrap: nowrap;
+                justify-content: space-around;
+            }
+            .nav-left, .nav-right {
+                gap: 0.2rem;
+                flex-shrink: 0.6;
+            }
+            .nav-left button, .nav-right button {
+                font-size: 0.75rem;
+                padding: 0.3rem 0.6rem;
+                min-width: 50px;
+            }
+            .search-container {
+                min-width: 60px;
+            }
+            .search-container input {
+                width: 50px;
+                font-size: 0.75rem;
+                padding: 0.2rem 0.3rem;
+            }
+            .search-container button {
+                font-size: 0.75rem;
+                padding: 0.2rem 0.3rem;
+            }
+            .nav-logo {
+                max-height: 30px;
+                margin: 0 0.2rem;
+            }
+            .nav-logo-container {
+                min-width: 40px;
+                flex-grow: 0.5;
+            }
+
+            /* Header Adjustments */
+            header {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-around;
+                padding: 0.5rem 1rem;
+            }
+            .header-logo-left, .header-logo-right {
+                max-height: 30px;
+                margin: 0 5px;
+            }
+            .header-text-container {
+                margin: 0 5px;
+                min-width: 60px;
+                flex-grow: 0.8;
+            }
+            header h1 {
+                font-size: 1rem;
+                white-space: normal;
+            }
+            .group-text {
+                font-size: 0.6rem;
+                white-space: normal;
+            }
+
+            /* Product Card Adjustments (3 columns maintained) */
+            .product-grid {
+                gap: 1rem;
+                padding: 0.5rem;
+            }
+            .product-card {
+                width: calc(33.33% - 0.67rem);
+                min-width: 100px;
+                padding: 0.5rem;
+                font-size: 0.65rem;
+            }
+            .product-card img {
+                height: 80px;
+            }
+            .product-card h3 {
+                font-size: 0.65rem;
+                margin: 0.3rem 0;
+            }
+            .product-card p {
+                font-size: 0.6rem;
+                margin-bottom: 0.2rem;
+            }
+            .product-card .price, .product-card .rating {
+                font-size: 0.65rem;
+            }
+            .product-card button {
+                padding: 0.3rem 0.5rem;
+                font-size: 0.65rem;
+                min-width: 60px;
+            }
+
+            /* Cart Section Adjustments */
+            #cart {
+                margin: 1rem auto;
+                padding: 0.5rem;
+            }
+            #cart h2 {
+                font-size: 1.2rem;
+            }
+            #cart-items li {
+                font-size: 0.7rem;
+                padding: 0.3rem 0;
+            }
+            .remove-from-cart-btn {
+                padding: 0.2rem 0.4rem;
+                font-size: 0.7rem;
+                min-width: 60px;
+            }
+            #cart-total {
+                font-size: 0.9rem;
+            }
+
+            /* Payment Section Adjustments for < 360px */
+            @media (max-width: 360px) {
+                #payment {
+                    margin: 1rem auto;
+                    padding: 0.5rem;
+                }
+                #payment h2 {
+                    font-size: 1.2rem;
+                }
+                .payment-options {
+                    gap: 0.8rem;
+                }
+                .payment-method {
+                    gap: 0.3rem;
+                }
+                .payment-method label {
+                    font-size: 0.8rem;
+                }
+                #card-element {
+                    font-size: 0.8rem;
+                    height: 35px;
+                    padding: 0.3rem;
+                }
+                .payment-method button {
+                    font-size: 0.7rem;
+                    padding: 0.4rem 0.8rem;
+                    min-width: 120px;
+                }
+                .error-message {
+                    font-size: 0.7rem;
+                }
+            }
+
+            /* Modal Adjustments */
+            .modal-content {
+                padding: 1rem;
+                width: 95%;
+                max-width: 360px;
+            }
+            .modal-title {
+                font-size: 1rem;
+            }
+            .modal-input-group textarea {
+                font-size: 0.8rem;
+                min-height: 60px;
+            }
+            .modal-button-group button {
+                font-size: 0.7rem;
+                padding: 0.4rem 0.8rem;
+                min-width: 80px;
+            }
+            .modal-response-area {
+                font-size: 0.7rem;
+                min-height: 80px;
+                max-height: 120px;
+            }
+            .disclaimer-text {
+                font-size: 0.6rem;
+            }
+
+            /* Hamburger Menu Activation */
+            .nav-left, .nav-right {
+                display: none;
+            }
+            .hamburger-btn {
+                display: block;
+            }
+            .nav-container {
+                flex-direction: column;
+                padding: 0.3rem;
+                gap: 0.3rem;
+                position: relative;
+            }
+            .nav-logo-container {
+                margin: 0.3rem 0;
+                min-width: 30px;
+            }
+            .nav-logo {
+                max-height: 25px;
+            }
+            .search-container {
+                width: 100%;
+                min-width: 0;
+            }
+            .search-container input {
+                width: 80%;
+                font-size: 0.7rem;
+                padding: 0.2rem;
+            }
+            .search-container button {
+                font-size: 0.7rem;
+                padding: 0.2rem;
+            }
+            .product-grid {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .product-card {
+                width: 100%;
+                min-width: 0;
+                padding: 0.3rem;
+            }
+            .product-card img {
+                height: 100px;
+            }
+            .product-card h3 {
+                font-size: 0.8rem;
+            }
+            .product-card p {
+                font-size: 0.6rem;
+            }
+            .product-card .price, .product-card .rating {
+                font-size: 0.7rem;
+            }
+            .product-card button {
+                padding: 0.2rem 0.4rem;
+                font-size: 0.6rem;
+                min-width: 70px;
+            }
+            .product-card .button-group {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+            #cart {
+                margin: 0.5rem auto;
+                padding: 0.3rem;
+            }
+            #cart h2 {
+                font-size: 1rem;
+            }
+            #cart-items li {
+                font-size: 0.6rem;
+                padding: 0.2rem 0;
+            }
+            .remove-from-cart-btn {
+                padding: 0.1rem 0.3rem;
+                font-size: 0.6rem;
+                min-width: 50px;
+            }
+            #cart-total {
+                font-size: 0.8rem;
+            }
+            #payment {
+                margin: 0.5rem auto;
+                padding: 0.3rem;
+            }
+            #payment h2 {
+                font-size: 1rem;
+            }
+            .payment-options {
+                gap: 0.5rem;
+            }
+            .payment-method {
+                gap: 0.2rem;
+            }
+            .payment-method label {
+                font-size: 0.7rem;
+            }
+            #card-element {
+                font-size: 0.7rem;
+                height: 30px;
+                padding: 0.2rem;
+            }
+            .payment-method button {
+                font-size: 0.6rem;
+                padding: 0.3rem 0.6rem;
+                min-width: 100px;
+            }
+            .error-message {
+                font-size: 0.6rem;
+            }
+            footer {
+                padding: 0.3rem;
+                font-size: 0.6rem;
+            }
+            footer a {
+                margin: 0 0.2rem;
+            }
+        }
+
+        /* Tablet and Small Laptop Adjustments (unchanged from original) */
+        @media (min-width: 431px) and (max-width: 768px) {
+            .nav-container {
+                padding: 0.5rem;
+                flex-wrap: nowrap;
+                justify-content: space-around;
+            }
+            .nav-left, .nav-right {
+                gap: 0.3rem;
+                flex-shrink: 0.5;
+            }
+            .nav-left button, .nav-right button {
+                font-size: 0.8rem;
+                padding: 0.3rem 0.6rem;
+            }
+            .search-container {
+                min-width: 70px;
+            }
+            .search-container input {
+                width: 60px;
+                font-size: 0.8rem;
+                padding: 0.2rem 0.3rem;
+            }
+            .search-container button {
+                font-size: 0.8rem;
+                padding: 0.2rem 0.3rem;
+            }
+            .nav-logo {
+                max-height: 35px;
+                margin: 0 0.3rem;
+            }
+            .nav-logo-container {
+                min-width: 50px;
+                flex-grow: 1;
+            }
+
+            header {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-around;
+                padding: 0.5rem 1rem;
+            }
+            .header-logo-left, .header-logo-right {
+                max-height: 40px;
+                margin: 0 5px;
+            }
+            .header-text-container {
+                margin: 0 5px;
+                min-width: 80px;
+                flex-grow: 1;
+            }
+            header h1 {
+                font-size: 1.2rem;
+                white-space: normal;
+            }
+            .group-text {
+                font-size: 0.7rem;
+                white-space: normal;
+            }
+
+            .product-card {
+                width: calc(33.33% - 1rem);
+                min-width: 150px;
+                padding: 0.7rem;
+                font-size: 0.75rem;
+            }
+            .product-card img {
+                height: 100px;
+            }
+            .product-card h3 {
+                font-size: 0.8rem;
+                margin: 0.4rem 0;
+            }
+            .product-card p {
+                font-size: 0.7rem;
+                margin-bottom: 0.3rem;
+            }
+            .product-card .price, .product-card .rating {
+                font-size: 0.8rem;
+            }
+            .product-card button {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.75rem;
+                min-width: 80px;
+            }
+
+            .modal-content {
+                padding: 1rem;
+                width: 95%;
+            }
+            .modal-title {
+                font-size: 1.2rem;
+            }
+            .modal-input-group textarea {
+                font-size: 0.9rem;
+                min-height: 60px;
+            }
+            .modal-button-group button {
+                font-size: 0.8rem;
+                padding: 0.5rem 1rem;
+            }
+            .modal-response-area {
+                font-size: 0.8rem;
+                min-height: 80px;
+                max-height: 150px;
+            }
+            .disclaimer-text {
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <button class="hamburger-btn" onclick="toggleMenu()">☰</button>
+            <ul class="nav-left">
+                <li><button onclick="window.location.href='index.html'">Home</button></li>
+                <li><button onclick="window.location.href='front.html'">Products</button></li>
+                <li><button onclick="showCart()">Cart</button></li>
+            </ul>
+
+            <div class="nav-logo-container">
+                <a href="index.html" class="nav-logo-link">
+                    <img src="imagefolder/loogo.jpg" alt="PharmaRetail Navigation Logo" class="nav-logo">
+                </a>
+            </div>
+            <ul class="nav-right">
+                <li>
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Search products..." oninput="searchProducts()">
+                        <button>🔍</button>
+                    </div>
+                </li>
+                <li><button onclick="window.location.href='index.html'">Logout</button></li>
+                <li><button onclick="window.location.href='login.html'">Login</button></li>
+            </ul>
+            <div class="mobile-menu" id="mobileMenu">
+                <button onclick="window.location.href='index.html'">Home</button>
+                <button onclick="window.location.href='front.html'">Products</button>
+                <button onclick="showCart()">Cart</button>
+                <button onclick="window.location.href='index.html'">Logout</button>
+                <button onclick="window.location.href='login.html'">Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <header>
+        <img src="imagefolder/logo 002.jpg" alt="PharmaRetail Logo Left" class="header-logo-left">
+        <div class="header-text-container">
+            <div class="group-text">(GROUP-2)</div>
+            <h1>Sky Healthcare - Quality Medications</h1>
+        </div>
+        <img src="imagefolder/logo001.jpg" alt="PharmaRetail Logo Right" class="header-logo-right">
+    </header>
+
+    <section id="products" class="product-grid">
+        <!-- Products will be displayed here by JavaScript for the front page -->
+    </section>
+
+    <section id="cart">
+        <h2>Shopping Cart</h2>
+        <ul id="cart-items"></ul>
+        <div id="cart-total">Total: $0.00</div>
+        <button onclick="showPayment()">Proceed to Payment</button>
+    </section>
+
+    <section id="payment">
+        <h2>Payment Details</h2>
+        <div class="payment-options">
+            <div class="payment-method">
+                <label>Card Payment (Apple Pay, Google Pay)</label>
+                <div id="card-element"></div>
+                <div id="card-errors" class="error-message"></div>
+                <button id="card-button">Pay Now</button>
+            </div>
+            <div class="payment-method">
+                <label>PayPal</label>
+                <button id="paypal-button">Pay with PayPal</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Contact us: info@pharmaretail.com | Phone: +1-800-555-1234</p>
+        <p><a href="#privacy">Privacy Policy</a> | <a href="#terms">Terms of Service</a></p>
+        <p>© 2025 PharmaRetail. All rights reserved.</p>
+    </footer>
+
+    <!-- AI Product Info Modal -->
+    <div id="productInfoModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeProductInfoModal()">✖</button>
+            <h3 class="modal-title" id="modalProductTitle"></h3>
+            <div class="modal-input-group">
+                <textarea id="aiQuestionInput" placeholder="Ask a question about this product (e.g., 'What are its common uses?', 'Are there any food interactions?')..."></textarea>
+                <div class="modal-button-group">
+                    <button onclick="askAIAboutProduct()">✨ Ask AI ✨</button>
+                </div>
+            </div>
+            <div class="modal-response-area" id="aiResponseArea">
+                <div class="loading-indicator" id="aiLoadingIndicator"></div>
+            </div>
+            <p class="disclaimer-text">
+                **Disclaimer:** Information provided by AI is for general knowledge only and should not be considered medical advice. Always consult with a qualified healthcare professional for medical concerns.
+            </p>
+        </div>
+    </div>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        // Sample product data
+        const products = [
+            { id: 1, name: "Paracetamol 500mg", description: "Pain reliever and fever reducer", price: 5.99, image: "imagefolder/PARACETAMOL SYRUP (FOR KIDS).jpg", rating: 4.5 },
+            { id: 2, name: "Ibuprofen 200mg", description: "Anti-inflammatory and pain relief", price: 7.49, image: "imagefolder/ACTIFED DRY COUGH & COLD SYRUP.jpg", rating: 4.6 },
+            { id: 3, name: "Amoxicillin 250mg", description: "Antibiotic for bacterial infections", price: 12.99, image: "imagefolder/ACTIFED SYRUP COLD.jpg", rating: 4.8 },
+            { id: 4, name: "Cetirizine 10mg", description: "Antihistamine for allergies", price: 9.99, image: "imagefolder/AGUE NIL SYRUP.jpg", rating: 4.5 },
+            { id: 5, name: "Aspirin 325mg", description: "Pain relief and anti-inflammatory", price: 6.49, image: "imagefolder/AMODIAQUINE SUSPENSION ANTI-MALARIA 50mg.jpg", rating: 4.9 },
+            { id: 6, name: "Loratadine 10mg", description: "Non-drowsy allergy relief", price: 8.99, image: "imagefolder/ANTACID CALCIUM CARBONATE 750mg.jpg", rating: 4.8 },
+            { id: 7, name: "Omeprazole 20mg", description: "Acid reflux and heartburn relief", price: 11.49, image: "imagefolder/ANTIBIOTICS 250mg.jpg", rating: 4.7 },
+            { id: 8, name: "Metformin 500mg", description: "Type 2 diabetes management", price: 15.99, image: "imagefolder/ARTEMETHER 20mg & LUMEFANTRINE 120mg.jpg", rating: 4.6 },
+            { id: 9, name: "Ciprofloxacin 500mg", description: "Antibiotic for infections", price: 14.29, image: "imagefolder/TOB CEE.jpg", rating: 4.6 },
+            { id: 10, name: "Simvastatin 20mg", description: "Cholesterol management", price: 10.99, image: "imagefolder/BENYLIN MUCUS RELIEF.jpg", rating: 4.9 },
+            { id: 11, name: "Losartan 50mg", description: "Blood pressure control", price: 13.49, image: "imagefolder/AGUE NIL SYRUP.jpg", rating: 5.0 },
+            { id: 12, name: "Levothyroxine 100mcg", description: "Thyroid hormone replacement", price: 9.29, image: "imagefolder/CLOFORT 125Mmg-5ml.jpg", rating: 4.5 },
+            { id: 13, name: "Azithromycin 250mg", description: "Antibiotic for bacterial infections", price: 12.79, image: "imagefolder/BENDROFLUENT CAPSULES.jpg", rating: 4.7 },
+            { id: 14, name: "Prednisone 10mg", description: "Anti-inflammatory steroid", price: 8.49, image: "imagefolder/CLOFORT 500mg.jpg", rating: 4.7 },
+            { id: 15, name: "Hydrochlorothiazide 25mg", description: "Diuretic for blood pressure", price: 7.99, image: "imagefolder/Entramol.jpg", rating: 4.8 },
+            { id: 16, name: "Furosemide 40mg", description: "Diuretic for edema", price: 9.49, image: "imagefolder/BENYLIN MUCUS RELIEVER.jpg", rating: 4.8 },
+            { id: 17, name: "Atorvastatin 40mg", description: "Cholesterol-lowering statin", price: 11.99, image: "imagefolder/FLORIDA HERBAL SUPER B-15.jpg", rating: 4.5 },
+            { id: 18, name: "Lisinopril 20mg", description: "ACE inhibitor for hypertension", price: 10.49, image: "imagefolder/FORTE VITAMIN C.jpg", rating: 4.9 },
+            { id: 19, name: "Metoprolol 50mg", description: "Beta blocker for heart conditions", price: 12.29, image: "imagefolder/GEBEDOL PAIN KILLER.jpg", rating: 4.6 },
+            { id: 20, name: "Clarithromycin 500mg", description: "Antibiotic for infections", price: 14.99, image: "imagefolder/KOCEF-250mg.jpg", rating: 4.6 },
+            { id: 21, name: "Pantoprazole 40mg", description: "Proton pump inhibitor for GERD", price: 13.79, image: "imagefolder/KOFOF.jpg", rating: 4.7 },
+            { id: 22, name: "Gabapentin 300mg", description: "Neuropathic pain relief", price: 11.29, image: "imagefolder/LEMSIP MAX COLD & FLUID CAPSULES.jpg", rating: 4.9 },
+        ];
+
+        // Cart array to store items
+        let cart = [];
+        let currentProductForAI = null;
+        const stripe = Stripe('pk_test_your_publishable_key_here'); // Replace with your Stripe publishable key
+
+        // Function to display products
+        function displayProducts(filteredProducts = products) {
+            const productGrid = document.querySelector('.product-grid');
+            productGrid.innerHTML = '';
+            filteredProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.classList.add('product-card');
+                const stars = '★'.repeat(Math.floor(product.rating)) + (product.rating % 1 >= 0.5 ? '½' : '');
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                    <div class="price">$${product.price.toFixed(2)}</div>
+                    <div class="rating">${stars} (${product.rating})</div>
+                    <div class="button-group">
+                        <button onclick="addToCart(${product.id})">Add to Cart</button>
+                        <button onclick="openProductInfoModal(${product.id})">✨ Ask AI ✨</button>
+                    </div>
+                `;
+                productGrid.appendChild(productCard);
+            });
+        }
+
+        // Search functionality
+        function searchProducts() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const filteredProducts = products.filter(product =>
+                product.name.toLowerCase().includes(searchInput) ||
+                product.description.toLowerCase().includes(searchInput)
+            );
+            displayProducts(filteredProducts);
+        }
+
+        // Add to Cart function
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                const cartItem = cart.find(item => item.id === productId);
+                if (cartItem) {
+                    cartItem.quantity++;
+                } else {
+                    cart.push({ ...product, quantity: 1 });
+                }
+                updateCart();
+                alert(`${product.name} added to cart! Quantity: ${cartItem ? cartItem.quantity : 1}`);
+            }
+        }
+
+        // Remove from Cart function
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCart();
+        }
+
+        // Update Cart display and total
+        function updateCart() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<li style="text-align: center; color: #555; font-style: italic; padding: 1rem;">EMPTY CART</li>';
+                document.getElementById('cart-total').textContent = `Total: $0.00`;
+                return;
+            }
+
+            cart.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${item.name} x ${item.quantity}</span>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                    <button class="remove-from-cart-btn" onclick="removeFromCart(${item.id})">Remove</button>
+                `;
+                cartItemsContainer.appendChild(li);
+                total += item.price * item.quantity;
+            });
+
+            document.getElementById('cart-total').textContent = `Total: $${total.toFixed(2)}`;
+        }
+
+        // Toggle Cart visibility and scroll to cart section
+        function showCart() {
+            const cartSection = document.getElementById('cart');
+            cartSection.style.display = cartSection.style.display === 'block' ? 'none' : 'block';
+
+            if (cartSection.style.display === 'block') {
+                updateCart();
+                cartSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Toggle Payment visibility and scroll to payment section
+        function showPayment() {
+            const paymentSection = document.getElementById('payment');
+            paymentSection.style.display = paymentSection.style.display === 'block' ? 'none' : 'block';
+
+            if (paymentSection.style.display === 'block') {
+                updateCart();
+                paymentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                initializePaymentForm();
+            }
+        }
+
+        // Initialize Stripe Elements for payment form
+        function initializePaymentForm() {
+            const elements = stripe.elements();
+            const cardElement = elements.create('card', {
+                style: {
+                    base: {
+                        fontSize: '16px',
+                        color: '#333',
+                        '::placeholder': { color: '#888' }
+                    }
+                }
+            });
+            cardElement.mount('#card-element');
+
+            const cardButton = document.getElementById('card-button');
+            const cardErrors = document.getElementById('card-errors');
+
+            cardButton.addEventListener('click', async () => {
+                const { error, paymentMethod } = await stripe.createPaymentMethod({
+                    type: 'card',
+                    card: cardElement,
+                });
+
+                if (error) {
+                    cardErrors.textContent = error.message;
+                    cardErrors.style.display = 'block';
+                } else {
+                    processPayment(paymentMethod.id);
+                }
+            });
+
+            // Initialize Apple Pay and Google Pay
+            if (window.ApplePaySession) {
+                const paymentRequest = stripe.paymentRequest({
+                    country: 'US',
+                    currency: 'usd',
+                    total: {
+                        label: 'PharmaRetail Order',
+                        amount: Math.round(parseFloat(document.getElementById('cart-total').textContent.replace('Total: $', '')) * 100),
+                    },
+                    requestPayerName: true,
+                    requestPayerEmail: true,
+                });
+
+                const prButton = elements.create('paymentRequestButton', {
+                    paymentRequest: paymentRequest,
+                });
+
+                paymentRequest.canMakePayment().then(result => {
+                    if (result) {
+                        prButton.mount('#card-element');
+                    }
+                });
+
+                paymentRequest.on('paymentmethod', async (e) => {
+                    const { error, paymentIntent } = await stripe.confirmCardPayment(
+                        e.paymentIntent.clientSecret,
+                        { payment_method: e.paymentMethod.id },
+                        { handleActions: false }
+                    );
+                    if (error) {
+                        cardErrors.textContent = error.message;
+                        cardErrors.style.display = 'block';
+                    } else {
+                        processPayment(e.paymentMethod.id);
+                    }
+                    e.complete('success');
+                });
+            }
+
+            // Initialize PayPal
+            const paypalButton = document.getElementById('paypal-button');
+            paypalButton.addEventListener('click', () => {
+                stripe.createSource({
+                    type: 'paypal',
+                    amount: Math.round(parseFloat(document.getElementById('cart-total').textContent.replace('Total: $', '')) * 100),
+                    currency: 'usd',
+                }).then(result => {
+                    if (result.error) {
+                        cardErrors.textContent = result.error.message;
+                        cardErrors.style.display = 'block';
+                    } else {
+                        processPayment(result.source.id);
+                    }
+                });
+            });
+        }
+
+        // Process payment (client-side trigger, server-side required)
+        function processPayment(paymentMethodId) {
+            fetch('/create-payment-intent', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    paymentMethodId: paymentMethodId,
+                    amount: Math.round(parseFloat(document.getElementById('cart-total').textContent.replace('Total: $', '')) * 100),
+                    currency: 'usd',
+                })
+            }).then(response => response.json()).then(result => {
+                if (result.error) {
+                    document.getElementById('card-errors').textContent = result.error;
+                    document.getElementById('card-errors').style.display = 'block';
+                } else if (result.clientSecret) {
+                    return stripe.confirmCardPayment(result.clientSecret);
+                }
+            }).then(result => {
+                if (result && result.paymentIntent && result.paymentIntent.status === 'succeeded') {
+                    alert(`Payment of $${(parseFloat(document.getElementById('cart-total').textContent.replace('Total: $', ''))).toFixed(2)} processed successfully!`);
+                    cart = [];
+                    updateCart();
+                    showPayment();
+                }
+            }).catch(error => {
+                document.getElementById('card-errors').textContent = 'An error occurred. Please try again.';
+                document.getElementById('card-errors').style.display = 'block';
+            });
+        }
+
+        // AI Feature Functions
+        function openProductInfoModal(productId) {
+            currentProductForAI = products.find(p => p.id === productId);
+            if (currentProductForAI) {
+                document.getElementById('modalProductTitle').textContent = `Ask about: ${currentProductForAI.name}`;
+                document.getElementById('aiQuestionInput').value = '';
+                document.getElementById('aiResponseArea').innerHTML = '<div class="loading-indicator" id="aiLoadingIndicator"></div>';
+                document.getElementById('aiLoadingIndicator').style.display = 'none';
+                document.getElementById('productInfoModal').style.display = 'flex';
+            }
+        }
+
+        function closeProductInfoModal() {
+            document.getElementById('productInfoModal').style.display = 'none';
+            currentProductForAI = null;
+        }
+
+        async function askAIAboutProduct() {
+            const questionInput = document.getElementById('aiQuestionInput');
+            const aiResponseArea = document.getElementById('aiResponseArea');
+            const aiLoadingIndicator = document.getElementById('aiLoadingIndicator');
+
+            const productName = currentProductForAI ? currentProductForAI.name : "a product";
+            const userQuestion = questionInput.value.trim();
+
+            if (!userQuestion) {
+                aiResponseArea.textContent = "Please enter your question.";
+                return;
+            }
+
+            aiResponseArea.textContent = '';
+            aiLoadingIndicator.style.display = 'block';
+
+            const prompt = `Provide general informational details about ${productName} based on the following question: "${userQuestion}". If the question asks for medical advice, gently state that you cannot provide medical advice and suggest consulting a healthcare professional. Keep the answer concise and informative, focusing on common knowledge for over-the-counter medication if applicable.`;
+
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = "";
+
+            try {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    aiResponseArea.textContent = text;
+                } else {
+                    aiResponseArea.textContent = "Error: Could not get a valid response from AI. Please try again.";
+                    console.error("AI response structure unexpected:", result);
+                }
+            } catch (error) {
+                aiResponseArea.textContent = "Error communicating with AI. Please check your network and try again.";
+                console.error("Error calling Gemini API:", error);
+            } finally {
+                aiLoadingIndicator.style.display = 'none';
+            }
+        }
+
+        // Hamburger Menu Toggle
+        function toggleMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Initialize display for products and cart on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            displayProducts();
+            updateCart();
+        });
+    </script>
+</body>
+</html>
